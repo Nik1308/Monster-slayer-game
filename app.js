@@ -8,13 +8,44 @@ const app =  Vue.createApp({
   },
   computed:{
     monsterBarStyles(){
+      if(this.monsterHealth <= 0){
+        return {width: '0%'}
+      }
       return {width: this.monsterHealth + '%'}
     },
     playerBarStyles(){
+      if(this.playerHealth <= 0){
+        return {width: '0%'}
+      }
       return {width: this.playerHealth + '%'}
     },
     mayUseSpecialAttack(){
       return this.currentRound % 3 !== 0
+    }
+  },
+  watch:{
+    playerHealth(value){
+      if(value<=0 && this.monsterHealth <=0){
+        alert("Game Over!\n It'a draw!")
+        this.playerHealth =  100,
+        this.monsterHealth = 100,
+        this.currentRound = 0
+      }else if(value <= 0){
+        alert("Game Over!\n You lost")
+        this.playerHealth =  100,
+        this.monsterHealth = 100,
+        this.currentRound = 0
+      }
+    },
+    monsterHealth(value){
+      if(value<=0 && this.playerHealth <=0){
+        alert("Game Over!\n It'a draw!")
+      }else if(value <= 0){
+        alert("Game Over!\n You won")
+        this.playerHealth =  100,
+        this.monsterHealth = 100,
+        this.currentRound = 0
+      }
     }
   },
   methods: {
@@ -44,6 +75,12 @@ const app =  Vue.createApp({
         this.playerHealth += healValue;
       } 
       this.attackPlayer(); 
+    },
+    surrender(){
+      alert("Game Over!\n You lost")
+      this.playerHealth =  100,
+      this.monsterHealth = 100,
+      this.currentRound = 0
     }
   }
 });
